@@ -16,6 +16,7 @@ def loadImages(Piece_List):
         pieces.append(i.text[2:4])
     for piece in pieces:
         IMAGES[piece] = p.transform.scale(p.image.load("Images/" + piece + ".png"), (SQ_SIZE, SQ_SIZE))
+    IMAGES["--"] = p.transform.scale(p.image.load("Images/" + "--" + ".png"), (SQ_SIZE, SQ_SIZE))
 
 #######################################
 # MAIN DRIVER. THIS WILL HANDLE USER INPUT AND UPDATING GRAPHICS
@@ -61,7 +62,7 @@ def main():
 
     gs = ChessEngine.GameState(Piece_List)
     loadImages(Piece_List)
-    print(IMAGES)
+    # print(IMAGES)
     running = True
     sqSelected = ()
     playerClicks = []
@@ -69,27 +70,34 @@ def main():
         for e in p.event.get():
             if e.type == p.QUIT:
                 running = False
-    #         elif e.type == p.MOUSEBUTTONDOWN:
-    #             location = p.mouse.get_pos()
-    #             col = location[0] // SQ_SIZE
-    #             row = location[1] // SQ_SIZE
-    #             if sqSelected == (row, col):
-    #                 sqSelected = ()
-    #                 playerClicks = []
-    #             else:
-    #                 sqSelected = (row, col)
-    #                 playerClicks.append(sqSelected)
-    #             if len(playerClicks) == 2:
-    #                 if gs.board[playerClicks[0][0]][playerClicks[0][1]] == "--":
-    #                     sqSelected = ()
-    #                     playerClicks = []
-    #                 else:
-    #                     move = ChessEngine.Move(playerClicks[0], playerClicks[1], gs.board)
-    #                     print(move.getChessPosition())
-    #                     gs.makeMove(move)
-    #                     sqSelected = ()
-    #                     playerClicks = []
-    #                     # print(gs.board)
+            elif e.type == p.MOUSEBUTTONDOWN:
+                location = p.mouse.get_pos()
+                col = location[0] // SQ_SIZE
+                row = location[1] // SQ_SIZE
+                if sqSelected == (row, col):
+                    sqSelected = ()
+                    playerClicks = []
+                else:
+                    sqSelected = (row, col)
+                    playerClicks.append(sqSelected)
+                if len(playerClicks) == 2:
+                    if gs.board[playerClicks[0][0]][playerClicks[0][1]] == "----":
+                        sqSelected = ()
+                        playerClicks = []
+                    else:
+                        # print([playerClicks[0][0], playerClicks[0][1]])
+                        # print(sqSelected[0])
+                        for piece in Piece_List:
+                            if piece.position == [playerClicks[0][0], playerClicks[0][1]]:
+                                print(piece.position)
+                                move = ChessEngine.Move(playerClicks[0], playerClicks[1], gs.board)
+                                # print(move.getChessPosition())
+                                gs.makeMove(move, piece)
+                                print(piece.position)
+                                sqSelected = ()
+                                playerClicks = []
+            #                     # print(gs.board)
+                                break
 
         drawGameState(screen, gs, Piece_List)
         clock.tick(MAX_FPS)
@@ -119,8 +127,8 @@ def drawPieces(screen, board, Piece_List):
                 for i in Piece_List:
                     if piece == i.text:
                         screen.blit(p.transform.rotate(IMAGES[piece[2:4]], i.orientation), p.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
-            # else:
-            #     screen.blit(IMAGES["--"],p.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
+            else:
+                screen.blit(IMAGES["--"],p.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
                 
 
 if __name__ == "__main__":

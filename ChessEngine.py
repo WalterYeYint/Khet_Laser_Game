@@ -18,9 +18,10 @@ class GameState():
         self.silverToMove = True
         self.moveLog = []
     
-    def makeMove(self, move):
+    def makeMove(self, move, piece):
         self.board[move.startRow][move.startCol] = "----"
         self.board[move.endRow][move.endCol] = move.pieceMoved
+        piece.position = [move.endRow, move.endCol]
         self.moveLog.append(move)
         self.silverToMove = not self.silverToMove
 
