@@ -27,32 +27,32 @@ def main():
     clock = p.time.Clock()
     screen.fill(p.Color("white"))
 
-    red_Sphinx = ChessEngine.Sphinx([0, 0], "r", "01", 180)
-    silver_Sphinx = ChessEngine.Sphinx([7, 9], "s", "02", 0)
-    red_Pharoh = ChessEngine.Pharoh([0, 5], "r", "01", 180)
-    silver_Pharoh = ChessEngine.Pharoh([7, 4], "s", "02", 0)
-    red_Anubis_1 = ChessEngine.Anubis([0, 4], "r", "01", 180)
-    red_Anubis_2 = ChessEngine.Anubis([0, 6], "r", "02", 180)
-    silver_Anubis_1 = ChessEngine.Anubis([7, 3], "s", "03", 0)
-    silver_Anubis_2 = ChessEngine.Anubis([7, 5], "s", "04", 0)
-    red_Scarab_1 = ChessEngine.Scarab([3, 4], "r", "01", 0)
-    red_Scarab_2 = ChessEngine.Scarab([3, 5], "r", "02", -90)
-    silver_Scarab_1 = ChessEngine.Scarab([4, 4], "s", "03", 90)
-    silver_Scarab_2 = ChessEngine.Scarab([4, 5], "s", "04", 180)
-    red_Pyramid_1 = ChessEngine.Pyramid([0, 7], "r", "01", 90)
-    red_Pyramid_2 = ChessEngine.Pyramid([1, 2], "r", "02", 0)
-    red_Pyramid_3 = ChessEngine.Pyramid([3, 0], "r", "03", 180)
-    red_Pyramid_4 = ChessEngine.Pyramid([3, 7], "r", "04", 90)
-    red_Pyramid_5 = ChessEngine.Pyramid([4, 0], "r", "05", 90)
-    red_Pyramid_6 = ChessEngine.Pyramid([4, 7], "r", "06", 180)
-    red_Pyramid_7 = ChessEngine.Pyramid([5, 6], "r", "07", 90)
-    silver_Pyramid_1 = ChessEngine.Pyramid([2, 3], "s", "08", -90)
-    silver_Pyramid_2 = ChessEngine.Pyramid([3, 2], "s", "09", 0)
-    silver_Pyramid_3 = ChessEngine.Pyramid([3, 9], "s", "10", -90)
-    silver_Pyramid_4 = ChessEngine.Pyramid([4, 2], "s", "11", -90)
-    silver_Pyramid_5 = ChessEngine.Pyramid([4, 9], "s", "12", 0)
-    silver_Pyramid_6 = ChessEngine.Pyramid([6, 7], "s", "13", 180)
-    silver_Pyramid_7 = ChessEngine.Pyramid([7, 2], "s", "14", -90)
+    red_Sphinx = ChessEngine.Sphinx([0, 0], "r", "01", "Sphinx", 180)
+    silver_Sphinx = ChessEngine.Sphinx([7, 9], "s", "02", "Sphinx", 0)
+    red_Pharoh = ChessEngine.Pharoh([0, 5], "r", "01", "Pharoh", 180)
+    silver_Pharoh = ChessEngine.Pharoh([7, 4], "s", "02", "Pharoh", 0)
+    red_Anubis_1 = ChessEngine.Anubis([0, 4], "r", "01", "Anubis", 180)
+    red_Anubis_2 = ChessEngine.Anubis([0, 6], "r", "02", "Anubis", 180)
+    silver_Anubis_1 = ChessEngine.Anubis([7, 3], "s", "03", "Anubis", 0)
+    silver_Anubis_2 = ChessEngine.Anubis([7, 5], "s", "04", "Anubis", 0)
+    red_Scarab_1 = ChessEngine.Scarab([3, 4], "r", "01", "Scarab", 0)
+    red_Scarab_2 = ChessEngine.Scarab([3, 5], "r", "02", "Scarab", -90)
+    silver_Scarab_1 = ChessEngine.Scarab([4, 4], "s", "03", "Scarab", 90)
+    silver_Scarab_2 = ChessEngine.Scarab([4, 5], "s", "04", "Scarab", 180)
+    red_Pyramid_1 = ChessEngine.Pyramid([0, 7], "r", "01", "Pyramid", 90)
+    red_Pyramid_2 = ChessEngine.Pyramid([1, 2], "r", "02", "Pyramid", 0)
+    red_Pyramid_3 = ChessEngine.Pyramid([3, 0], "r", "03", "Pyramid", 180)
+    red_Pyramid_4 = ChessEngine.Pyramid([3, 7], "r", "04", "Pyramid", 90)
+    red_Pyramid_5 = ChessEngine.Pyramid([4, 0], "r", "05", "Pyramid", 90)
+    red_Pyramid_6 = ChessEngine.Pyramid([4, 7], "r", "06", "Pyramid", 180)
+    red_Pyramid_7 = ChessEngine.Pyramid([5, 6], "r", "07", "Pyramid", 90)
+    silver_Pyramid_1 = ChessEngine.Pyramid([2, 3], "s", "08", "Pyramid", -90)
+    silver_Pyramid_2 = ChessEngine.Pyramid([3, 2], "s", "09", "Pyramid", 0)
+    silver_Pyramid_3 = ChessEngine.Pyramid([3, 9], "s", "10", "Pyramid", -90)
+    silver_Pyramid_4 = ChessEngine.Pyramid([4, 2], "s", "11", "Pyramid", -90)
+    silver_Pyramid_5 = ChessEngine.Pyramid([4, 9], "s", "12", "Pyramid", 0)
+    silver_Pyramid_6 = ChessEngine.Pyramid([6, 7], "s", "13", "Pyramid", 180)
+    silver_Pyramid_7 = ChessEngine.Pyramid([7, 2], "s", "14", "Pyramid", -90)
     # Piece_List = [red_Sphinx, silver_Sphinx, red_Pyramid_1, silver_Pyramid_1]
     Piece_List = [red_Sphinx, silver_Sphinx, red_Pharoh, silver_Pharoh, red_Anubis_1,\
         red_Anubis_2, silver_Anubis_1, silver_Anubis_2, red_Scarab_1, red_Scarab_2, silver_Scarab_1,\
@@ -91,7 +91,6 @@ def main():
                             if piece.position == [playerClicks[0][0], playerClicks[0][1]]:
                                 # print(piece.position)
                                 move = ChessEngine.Move(playerClicks[0], playerClicks[1], gs.board)
-                                # print(move.getChessPosition())
                                 gs.makeMove(move, piece)
                                 # print(piece.position)
                                 sqSelected = ()
@@ -102,10 +101,30 @@ def main():
                 if len(playerClicks) == 1:
                     for piece in Piece_List:
                         if piece.position == [playerClicks[0][0], playerClicks[0][1]]:
+                            if piece.name == "Pharoh":
+                                print("Pharoh doesn't need to rotate")
+                                break
                             if e.key == p.K_LEFT:
-                                piece.orientation += 90
+                                if piece.name == "Sphinx" and piece.id == "01" and piece.orientation == 270:
+                                    print("Sphinx cannot rotate further")
+                                    break
+                                elif piece.name == "Sphinx" and piece.id == "02" and piece.orientation == 90:
+                                    print("Sphinx cannot rotate further")
+                                    break
+                                else:
+                                    piece.orientation += 90
                             elif e.key == p.K_RIGHT:
-                                piece.orientation -= 90
+                                if piece.name == "Sphinx" and piece.id == "01" and piece.orientation == 180:
+                                    print("Sphinx cannot rotate further")
+                                    break
+                                elif piece.name == "Sphinx" and piece.id == "02" and piece.orientation == 0:
+                                    print("Sphinx cannot rotate further")
+                                    break
+                                else:
+                                    piece.orientation -= 90
+                            else:
+                                print("Invalid key input")
+                                break
                             if piece.orientation >= 360 or piece.orientation <= -360:
                                 piece.orientation = 0
                             print(piece.orientation)
