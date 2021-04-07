@@ -90,8 +90,11 @@ def main():
                         for piece in Piece_List:
                             if piece.position == [playerClicks[0][0], playerClicks[0][1]]:
                                 # print(piece.position)
-                                move = ChessEngine.Move(playerClicks[0], playerClicks[1], gs.board)
-                                gs.makeMove(move, piece)
+                                if piece.name == "Sphinx":
+                                    print("Sphinx can only be rotated")
+                                else:
+                                    move = ChessEngine.Move(playerClicks[0], playerClicks[1], gs.board)
+                                    gs.makeMove(move, piece)
                                 # print(piece.position)
                                 sqSelected = ()
                                 playerClicks = []
