@@ -1,7 +1,7 @@
 import pygame as p
 import ChessEngine
 
-WIDTH = HEIGHT = 512
+WIDTH = HEIGHT = 800
 DIMENSION_X = 10
 DIMENSION_Y = 8
 SQ_SIZE = WIDTH // DIMENSION_X
@@ -15,8 +15,8 @@ def loadImages(Piece_List):
     for i in Piece_List:
         pieces.append(i.text[2:4])
     for piece in pieces:
-        IMAGES[piece] = p.transform.scale(p.image.load("Images/" + piece + ".png"), (SQ_SIZE, SQ_SIZE))
-    IMAGES["--"] = p.transform.scale(p.image.load("Images/" + "--" + ".png"), (SQ_SIZE, SQ_SIZE))
+        IMAGES[piece] = p.transform.scale(p.image.load("Images/" + piece + ".png"), (SQ_SIZE - 2, SQ_SIZE - 2))
+    IMAGES["--"] = p.transform.scale(p.image.load("Images/" + "--" + ".png"), (SQ_SIZE - 2, SQ_SIZE - 2))
 
 #######################################
 # MAIN DRIVER. THIS WILL HANDLE USER INPUT AND UPDATING GRAPHICS
@@ -64,8 +64,10 @@ def main():
     loadImages(Piece_List)
     # print(IMAGES)
     running = True
+    laser_status = 0
     sqSelected = ()
     playerClicks = []
+    selected_Square = []
     while running:
         for e in p.event.get():
             if e.type == p.QUIT:
@@ -80,10 +82,12 @@ def main():
                 else:
                     sqSelected = (row, col)
                     playerClicks.append(sqSelected)
+                    selected_Square = [playerClicks[0][0], playerClicks[0][1]]
                 if len(playerClicks) == 2:
                     if gs.board[playerClicks[0][0]][playerClicks[0][1]] == "----":
                         sqSelected = ()
                         playerClicks = []
+                        selected_Square = []
                     else:
                         # print([playerClicks[0][0], playerClicks[0][1]])
                         # print(sqSelected[0])
@@ -98,6 +102,7 @@ def main():
                                 # print(piece.position)
                                 sqSelected = ()
                                 playerClicks = []
+                                selected_Square = []
                                 # print(gs.board)
                                 break
             elif e.type == p.KEYDOWN:
@@ -125,6 +130,14 @@ def main():
                                     break
                                 else:
                                     piece.orientation -= 90
+                            elif e.key == p.K_SPACE:
+                                if piece.name == "Sphinx":
+                                    print("Firing Laser")
+                                    laser_status = 1
+                                    break
+                                else:
+                                    print("This piece cannot fire laser")
+                                    break
                             else:
                                 print("Invalid key input")
                                 break
@@ -133,26 +146,31 @@ def main():
                             print(piece.orientation)
                     sqSelected = ()
                     playerClicks = []
+                    selected_Square = []
 
-        drawGameState(screen, gs, Piece_List)
+        laser_status = drawGameState(screen, gs, Piece_List, laser_status, selected_Square)
         clock.tick(MAX_FPS)
         p.display.flip()
 ##################################################
 # Responsible for all graphics in a current game state
 
-def drawGameState(screen, gs, Piece_List):
-    drawBoard(screen)
+def drawGameState(screen, gs, Piece_List, laser_status, selected_Square):
+    drawBoard(screen, selected_Square)
     drawPieces(screen, gs.board, Piece_List)
+    if laser_status == 1:
+        laser_status = 0
+    return laser_status
 
 ##################################################
 # Draw the squares on the board.
 
-def drawBoard(screen):
+def drawBoard(screen, selected_Square):
     # colors = [p.Color("white"), p.Color("gray")]
     for r in range(DIMENSION_Y):
         for c in range(DIMENSION_X):
-            # color = colors[((r+c) % 2)]
             p.draw.rect(screen, p.Color("gray"), p.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE), 5)
+    if len(selected_Square) != 0:
+        p.draw.rect(screen, p.Color("blue"), p.Rect(selected_Square[1]*SQ_SIZE, selected_Square[0]*SQ_SIZE, SQ_SIZE, SQ_SIZE), 5)
 
 def drawPieces(screen, board, Piece_List):
     for r in range(DIMENSION_Y):
@@ -164,7 +182,7 @@ def drawPieces(screen, board, Piece_List):
                         screen.blit(p.transform.rotate(IMAGES[piece[2:4]], i.orientation), p.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
             else:
                 screen.blit(IMAGES["--"],p.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
-                
+
 
 if __name__ == "__main__":
     main()
