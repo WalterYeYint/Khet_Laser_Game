@@ -28,7 +28,7 @@ class GameState():
         dest_bl = [move.endRow - 1, move.endCol + 1]
         dest_br = [move.endRow - 1, move.endCol - 1]
         dest_tr = [move.endRow + 1, move.endCol - 1]
-        print(src_pt, dest_t, dest_b, dest_l, dest_r, dest_tl, dest_bl, dest_br, dest_tr)
+        # print(src_pt, dest_t, dest_b, dest_l, dest_r, dest_tl, dest_bl, dest_br, dest_tr)
         if src_pt == dest_t or src_pt == dest_b or src_pt == dest_l or src_pt == dest_r \
             or src_pt == dest_bl or src_pt == dest_br \
                 or src_pt == dest_tl or src_pt == dest_tr:

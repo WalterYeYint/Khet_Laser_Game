@@ -1,5 +1,6 @@
 import pygame as p
 import ChessEngine
+import time
 
 WIDTH = HEIGHT = 800
 DIMENSION_X = 10
@@ -65,6 +66,7 @@ def main():
     # print(IMAGES)
     running = True
     laser_status = 0
+    sphinx_piece = red_Sphinx
     sqSelected = ()
     playerClicks = []
     selected_Square = []
@@ -134,6 +136,7 @@ def main():
                                 if piece.name == "Sphinx":
                                     print("Firing Laser")
                                     laser_status = 1
+                                    sphinx_piece = piece
                                     break
                                 else:
                                     print("This piece cannot fire laser")
@@ -148,18 +151,22 @@ def main():
                     playerClicks = []
                     selected_Square = []
 
-        laser_status = drawGameState(screen, gs, Piece_List, laser_status, selected_Square)
+        drawGameState(screen, gs, Piece_List, selected_Square)
         clock.tick(MAX_FPS)
+        if laser_status == 1:
+            drawGameState(screen, gs, Piece_List, selected_Square)
+            shootLaser(screen, gs.board, Piece_List, sphinx_piece)
+            p.display.flip()
+            time.sleep(3)
+            laser_status = 0
         p.display.flip()
+
 ##################################################
 # Responsible for all graphics in a current game state
 
-def drawGameState(screen, gs, Piece_List, laser_status, selected_Square):
+def drawGameState(screen, gs, Piece_List, selected_Square):
     drawBoard(screen, selected_Square)
     drawPieces(screen, gs.board, Piece_List)
-    if laser_status == 1:
-        laser_status = 0
-    return laser_status
 
 ##################################################
 # Draw the squares on the board.
@@ -183,6 +190,38 @@ def drawPieces(screen, board, Piece_List):
             else:
                 screen.blit(IMAGES["--"],p.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
 
+def shootLaser(screen, board, Piece_List, sphinx_piece):
+    i = 0
+    j = 0
+    laser_orientation = 180
+    if sphinx_piece.id == "01":
+        i += 1
+        while i < DIMENSION_Y and j < DIMENSION_X:
+            while i < DIMENSION_Y and j < DIMENSION_X and board[i][j] == "----":
+                print(i, DIMENSION_Y)
+                p.draw.rect(screen, p.Color("red"), p.Rect(j*SQ_SIZE, i*SQ_SIZE, SQ_SIZE, SQ_SIZE), 5)
+                if sphinx_piece.orientation == 180:
+                    i += 1
+                else:
+                    j += 1
+            if i > 6:
+                i = 7
+            # print(board[i][j][2:4], Piece_List[2].orientation)
+            if board[i][j][2:4] == "rA" or board[i][j][2:4] == "sA":
+                if abs(Piece_List[2].orientation - laser_orientation) == 180:
+                    break
+                else:
+                    board[i][j] = "----"
+                    break
+            elif board[i][j][2:4] == "rP" or board[i][j][2:4] == "sP":
+                print("You've won")
+                break
+            else:
+                break
+            # elif piece.name == "Scarab":
+
+            
+        print("Out of loop")
 
 if __name__ == "__main__":
     main()
