@@ -269,14 +269,18 @@ def moveLaser(screen, board, Piece_List, sphinx_piece, Anubis_List, Scarab_List,
                         board[i][j] = "----"
                         laser_endpoint = 1
                         break
-            if laser_orientation > 360:
-                laser_orientation = laser_orientation - 360
-            elif laser_orientation < -360:
-                laser_orientation = laser_orientation + 360
-            print("Current laser orientation={}".format(laser_orientation))
+            laser_orientation = checkLaserOrientation(laser_orientation)
         elif board[i][j][2:4] == "rC" or board[i][j][2:4] == "sC":
-            laser_endpoint = 1
-            break 
+            for piece in Scarab_List:
+                if piece.id == board[i][j][0:2]:
+                    orientation_result = laser_orientation - piece.orientation
+                    if orientation_result == 0 or orientation_result == 360 or orientation_result == 180 or orientation_result == -180:
+                        laser_orientation += 90
+                        break
+                    else:
+                        laser_orientation -= 90
+                        break
+            laser_orientation = checkLaserOrientation(laser_orientation)
         elif board[i][j][2:4] == "rP" or board[i][j][2:4] == "sP":
             print("You've won")
             break
@@ -285,6 +289,13 @@ def moveLaser(screen, board, Piece_List, sphinx_piece, Anubis_List, Scarab_List,
         
         if laser_endpoint == 1:
             break
+
+def checkLaserOrientation(laser_orientation):
+    if laser_orientation > 360:
+        laser_orientation = laser_orientation - 360
+    elif laser_orientation < -360:
+        laser_orientation = laser_orientation + 360
+    return laser_orientation
 
 if __name__ == "__main__":
     main()
