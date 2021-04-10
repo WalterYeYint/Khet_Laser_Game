@@ -197,35 +197,20 @@ def drawPieces(screen, board, Piece_List):
 
 def shootLaser(screen, board, Piece_List, sphinx_piece, Anubis_List, Scarab_List, Pyramid_List):
     if sphinx_piece.id == "01":
-        switch_i = {
-            180: 1,
-            270: 0,
-        }
-        switch_j = {
-            180: 0,
-            270: 1,
-        }
-        i = switch_i.get(sphinx_piece.orientation)
-        j = switch_j.get(sphinx_piece.orientation)
+        i = 0
+        j = 0
         moveLaser(screen, board, Piece_List, sphinx_piece, Anubis_List, Scarab_List, Pyramid_List, i, j)
 
     elif sphinx_piece.id == "02":
-        switch_i = {
-            0: sphinx_piece.position[0] - 1,
-            90: sphinx_piece.position[0],
-        }
-        switch_j = {
-            0: sphinx_piece.position[1],
-            90: sphinx_piece.position[1] - 1,
-        }
-        i = switch_i.get(sphinx_piece.orientation)
-        j = switch_j.get(sphinx_piece.orientation)
+        i = sphinx_piece.position[0]
+        j = sphinx_piece.position[1]
         print(i, j)
         moveLaser(screen, board, Piece_List, sphinx_piece, Anubis_List, Scarab_List, Pyramid_List, i, j)
 
 def moveLaser(screen, board, Piece_List, sphinx_piece, Anubis_List, Scarab_List, Pyramid_List, i, j):
     
     laser_orientation = sphinx_piece.orientation
+    laser_endpoint = 0
     switch_i = {
         0: -1,
         180: +1,
@@ -234,33 +219,52 @@ def moveLaser(screen, board, Piece_List, sphinx_piece, Anubis_List, Scarab_List,
         270: +1,
         90: -1,
     }
-    while -1 < i < DIMENSION_Y and -1 < j < DIMENSION_X and board[i][j] == "----":
-        print(i, DIMENSION_Y)
-        p.draw.rect(screen, p.Color("red"), p.Rect(j*SQ_SIZE, i*SQ_SIZE, SQ_SIZE, SQ_SIZE), 5)
-        if sphinx_piece.orientation == 180 or sphinx_piece.orientation == 0:
-            i += switch_i.get(sphinx_piece.orientation)
-        else:
-            j += switch_j.get(sphinx_piece.orientation)
-    if i > 6:
-        i = 7
-    elif i < 0:
-        i = 0
-    if j > 6:
-        j = 7
-    elif j < 0:
-        j = 0
-    # print(board[i][j][2:4], Piece_List[2].orientation)
-    if board[i][j][2:4] == "rA" or board[i][j][2:4] == "sA":
-        for piece in Anubis_List:
-            if piece.id == board[i][j][0:2]:
-                if abs(piece.orientation - laser_orientation) == 180:
-                    break
-                else:
-                    board[i][j] = "----"
-    elif board[i][j][2:4] == "rP" or board[i][j][2:4] == "sP":
-        print("You've won")
+    while -1 < i < DIMENSION_Y and -1 < j < DIMENSION_X:
+        while True:
+            if laser_orientation == 180 or laser_orientation == 0:
+                i += switch_i.get(laser_orientation)
+            else:
+                j += switch_j.get(laser_orientation)
+            print(i, DIMENSION_Y)
+            if i <= DIMENSION_Y - 1 or j <= DIMENSION_X - 1:
+                p.draw.rect(screen, p.Color("red"), p.Rect(j*SQ_SIZE, i*SQ_SIZE, SQ_SIZE, SQ_SIZE), 5)
+            if not (-1 < i < DIMENSION_Y and -1 < j < DIMENSION_X and board[i][j] == "----"):
+                break
+        if i >= DIMENSION_Y:
+            i = 7
+        elif i <= 0:
+            i = 0
+        if j >= DIMENSION_X:
+            j = 9
+        elif j <= 0:
+            j = 0
+        # print(board[i][j][2:4], Piece_List[2].orientation)
+        if board[i][j][2:4] == "rA" or board[i][j][2:4] == "sA":
+            for piece in Anubis_List:
+                if piece.id == board[i][j][0:2]:
+                    orientation_result = abs(piece.orientation - laser_orientation)
+                    if orientation_result == 180:
+                        laser_endpoint = 1
+                        break
+                    else:
+                        board[i][j] = "----"
+                        laser_endpoint = 1
+                        break
+        # elif board[i][j][2:4] == "rY" or board[i][j][2:4] == "sY":
+        #     for piece in Pyramid_List:
+        #         if piece.id == board[i][j][0:2]:
+        #             orientation_result = abs(piece.orientation - laser_orientation)
+        #             if orientation_result == 0 or :
+        #                 j += switch_j.get(piece.orientation + 90)
+        #             elif orientation_result == :
+        elif board[i][j][2:4] == "rP" or board[i][j][2:4] == "sP":
+            print("You've won")
+            break
+        elif board[i][j] == "----":
+            break
         
-        # elif piece.name == "Scarab":
+        if laser_endpoint == 1:
+            break
 
 if __name__ == "__main__":
     main()
