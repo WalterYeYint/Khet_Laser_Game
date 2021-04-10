@@ -60,6 +60,11 @@ def main():
             silver_Scarab_2, red_Pyramid_1, red_Pyramid_2, red_Pyramid_3, red_Pyramid_4, red_Pyramid_5,\
                 red_Pyramid_6, red_Pyramid_7, silver_Pyramid_1, silver_Pyramid_2, silver_Pyramid_3, silver_Pyramid_4,\
                     silver_Pyramid_5, silver_Pyramid_6, silver_Pyramid_7]
+    
+    Anubis_List = [red_Anubis_1, red_Anubis_2, silver_Anubis_1, silver_Anubis_2]
+    Scarab_List = [red_Scarab_1, red_Scarab_2, silver_Scarab_1, silver_Scarab_2]
+    Pyramid_List = [red_Pyramid_1, red_Pyramid_2, red_Pyramid_3, red_Pyramid_4, red_Pyramid_5, red_Pyramid_6, red_Pyramid_7, \
+        silver_Pyramid_1, silver_Pyramid_2, silver_Pyramid_3, silver_Pyramid_4, silver_Pyramid_5, silver_Pyramid_6, silver_Pyramid_7]
 
     gs = ChessEngine.GameState(Piece_List)
     loadImages(Piece_List)
@@ -155,7 +160,7 @@ def main():
         clock.tick(MAX_FPS)
         if laser_status == 1:
             drawGameState(screen, gs, Piece_List, selected_Square)
-            shootLaser(screen, gs.board, Piece_List, sphinx_piece)
+            shootLaser(screen, gs.board, Piece_List, sphinx_piece, Anubis_List, Scarab_List, Pyramid_List)
             p.display.flip()
             time.sleep(3)
             laser_status = 0
@@ -190,38 +195,72 @@ def drawPieces(screen, board, Piece_List):
             else:
                 screen.blit(IMAGES["--"],p.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
 
-def shootLaser(screen, board, Piece_List, sphinx_piece):
-    i = 0
-    j = 0
-    laser_orientation = 180
+def shootLaser(screen, board, Piece_List, sphinx_piece, Anubis_List, Scarab_List, Pyramid_List):
     if sphinx_piece.id == "01":
-        i += 1
-        while i < DIMENSION_Y and j < DIMENSION_X:
-            while i < DIMENSION_Y and j < DIMENSION_X and board[i][j] == "----":
-                print(i, DIMENSION_Y)
-                p.draw.rect(screen, p.Color("red"), p.Rect(j*SQ_SIZE, i*SQ_SIZE, SQ_SIZE, SQ_SIZE), 5)
-                if sphinx_piece.orientation == 180:
-                    i += 1
-                else:
-                    j += 1
-            if i > 6:
-                i = 7
-            # print(board[i][j][2:4], Piece_List[2].orientation)
-            if board[i][j][2:4] == "rA" or board[i][j][2:4] == "sA":
-                if abs(Piece_List[2].orientation - laser_orientation) == 180:
+        switch_i = {
+            180: 1,
+            270: 0,
+        }
+        switch_j = {
+            180: 0,
+            270: 1,
+        }
+        i = switch_i.get(sphinx_piece.orientation)
+        j = switch_j.get(sphinx_piece.orientation)
+        moveLaser(screen, board, Piece_List, sphinx_piece, Anubis_List, Scarab_List, Pyramid_List, i, j)
+
+    elif sphinx_piece.id == "02":
+        switch_i = {
+            0: sphinx_piece.position[0] - 1,
+            90: sphinx_piece.position[0],
+        }
+        switch_j = {
+            0: sphinx_piece.position[1],
+            90: sphinx_piece.position[1] - 1,
+        }
+        i = switch_i.get(sphinx_piece.orientation)
+        j = switch_j.get(sphinx_piece.orientation)
+        print(i, j)
+        moveLaser(screen, board, Piece_List, sphinx_piece, Anubis_List, Scarab_List, Pyramid_List, i, j)
+
+def moveLaser(screen, board, Piece_List, sphinx_piece, Anubis_List, Scarab_List, Pyramid_List, i, j):
+    
+    laser_orientation = sphinx_piece.orientation
+    switch_i = {
+        0: -1,
+        180: +1,
+    }
+    switch_j = {
+        270: +1,
+        90: -1,
+    }
+    while -1 < i < DIMENSION_Y and -1 < j < DIMENSION_X and board[i][j] == "----":
+        print(i, DIMENSION_Y)
+        p.draw.rect(screen, p.Color("red"), p.Rect(j*SQ_SIZE, i*SQ_SIZE, SQ_SIZE, SQ_SIZE), 5)
+        if sphinx_piece.orientation == 180 or sphinx_piece.orientation == 0:
+            i += switch_i.get(sphinx_piece.orientation)
+        else:
+            j += switch_j.get(sphinx_piece.orientation)
+    if i > 6:
+        i = 7
+    elif i < 0:
+        i = 0
+    if j > 6:
+        j = 7
+    elif j < 0:
+        j = 0
+    # print(board[i][j][2:4], Piece_List[2].orientation)
+    if board[i][j][2:4] == "rA" or board[i][j][2:4] == "sA":
+        for piece in Anubis_List:
+            if piece.id == board[i][j][0:2]:
+                if abs(piece.orientation - laser_orientation) == 180:
                     break
                 else:
                     board[i][j] = "----"
-                    break
-            elif board[i][j][2:4] == "rP" or board[i][j][2:4] == "sP":
-                print("You've won")
-                break
-            else:
-                break
-            # elif piece.name == "Scarab":
-
-            
-        print("Out of loop")
+    elif board[i][j][2:4] == "rP" or board[i][j][2:4] == "sP":
+        print("You've won")
+        
+        # elif piece.name == "Scarab":
 
 if __name__ == "__main__":
     main()
