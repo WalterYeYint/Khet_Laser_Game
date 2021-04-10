@@ -32,11 +32,23 @@ class GameState():
         if src_pt == dest_t or src_pt == dest_b or src_pt == dest_l or src_pt == dest_r \
             or src_pt == dest_bl or src_pt == dest_br \
                 or src_pt == dest_tl or src_pt == dest_tr:
-            self.board[move.startRow][move.startCol] = "----"
-            self.board[move.endRow][move.endCol] = move.pieceMoved
-            piece.position = [move.endRow, move.endCol]
-            self.moveLog.append(move)
-            self.silverToMove = not self.silverToMove
+            if self.board[move.startRow][move.startCol][3:4] == "C":
+                if self.board[move.endRow][move.endCol][3:4] == "Y" or self.board[move.endRow][move.endCol][3:4] == "A" or self.board[move.endRow][move.endCol][3:4] == "-":
+                    self.board[move.startRow][move.startCol] = move.pieceCaptured
+                    self.board[move.endRow][move.endCol] = move.pieceMoved
+                    piece.position = [move.endRow, move.endCol]
+                    self.moveLog.append(move)
+                    self.silverToMove = not self.silverToMove
+                else:
+                    print("This piece cannot be swapped")
+            elif self.board[move.endRow][move.endCol] == "----":
+                self.board[move.startRow][move.startCol] = "----"
+                self.board[move.endRow][move.endCol] = move.pieceMoved
+                piece.position = [move.endRow, move.endCol]
+                self.moveLog.append(move)
+                self.silverToMove = not self.silverToMove
+            else:
+                print("This place is occupied")
         else:
             print("Pieces can only be moved 1 square")
 

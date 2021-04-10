@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import pygame as p
 import ChessEngine
 import time
@@ -91,6 +93,22 @@ def main():
                     playerClicks.append(sqSelected)
                     selected_Square = [playerClicks[0][0], playerClicks[0][1]]
                 if len(playerClicks) == 2:
+                    if gs.silverToMove == True:
+                        if gs.board[playerClicks[0][0]][playerClicks[0][1]][2:3] == "s":
+                            pass
+                        else:
+                            print("It is silver's turn")
+                            sqSelected = ()
+                            playerClicks = []
+                            continue
+                    else:
+                        if gs.board[playerClicks[0][0]][playerClicks[0][1]][2:3] == "r":
+                            pass
+                        else:
+                            print("It is red's turn")
+                            sqSelected = ()
+                            playerClicks = []
+                            continue
                     if gs.board[playerClicks[0][0]][playerClicks[0][1]] == "----":
                         sqSelected = ()
                         playerClicks = []
@@ -106,7 +124,7 @@ def main():
                                 else:
                                     move = ChessEngine.Move(playerClicks[0], playerClicks[1], gs.board)
                                     gs.makeMove(move, piece)
-                                # print(piece.position)
+                                print(gs.silverToMove)
                                 sqSelected = ()
                                 playerClicks = []
                                 selected_Square = []
@@ -128,6 +146,7 @@ def main():
                                     break
                                 else:
                                     piece.orientation += 90
+                                    gs.silverToMove = not gs.silverToMove
                             elif e.key == p.K_RIGHT:
                                 if piece.name == "Sphinx" and piece.id == "01" and piece.orientation == 180:
                                     print("Sphinx cannot rotate further")
@@ -137,9 +156,11 @@ def main():
                                     break
                                 else:
                                     piece.orientation -= 90
+                                    gs.silverToMove = not gs.silverToMove
                             elif e.key == p.K_SPACE:
                                 if piece.name == "Sphinx":
                                     print("Firing Laser")
+                                    gs.silverToMove = not gs.silverToMove
                                     laser_status = 1
                                     sphinx_piece = piece
                                     break
@@ -210,7 +231,7 @@ def shootLaser(screen, board, Piece_List, sphinx_piece, Anubis_List, Scarab_List
 def moveLaser(screen, board, Piece_List, sphinx_piece, Anubis_List, Scarab_List, Pyramid_List, i, j):
     
     laser_orientation = sphinx_piece.orientation
-    laser_endpoint = 0
+    laser_endpoint = False
     switch_i = {
         0: -1,
         180: +1,
@@ -243,18 +264,18 @@ def moveLaser(screen, board, Piece_List, sphinx_piece, Anubis_List, Scarab_List,
         elif j <= 0:
             j = 0
         # print(board[i][j][2:4], Piece_List[2].orientation)
-        if board[i][j][2:4] == "rA" or board[i][j][2:4] == "sA":
+        if board[i][j][3:4] == "A":
             for piece in Anubis_List:
                 if piece.id == board[i][j][0:2]:
                     orientation_result = abs(piece.orientation - laser_orientation)
                     if orientation_result == 180:
-                        laser_endpoint = 1
+                        laser_endpoint = True
                         break
                     else:
                         board[i][j] = "----"
-                        laser_endpoint = 1
+                        laser_endpoint = True
                         break
-        elif board[i][j][2:4] == "rY" or board[i][j][2:4] == "sY":
+        elif board[i][j][3:4] == "Y":
             for piece in Pyramid_List:
                 if piece.id == board[i][j][0:2]:
                     orientation_result = laser_orientation - piece.orientation
@@ -267,10 +288,10 @@ def moveLaser(screen, board, Piece_List, sphinx_piece, Anubis_List, Scarab_List,
                         break
                     else:
                         board[i][j] = "----"
-                        laser_endpoint = 1
+                        laser_endpoint = True
                         break
             laser_orientation = checkLaserOrientation(laser_orientation)
-        elif board[i][j][2:4] == "rC" or board[i][j][2:4] == "sC":
+        elif board[i][j][3:4] == "C":
             for piece in Scarab_List:
                 if piece.id == board[i][j][0:2]:
                     orientation_result = laser_orientation - piece.orientation
@@ -281,13 +302,15 @@ def moveLaser(screen, board, Piece_List, sphinx_piece, Anubis_List, Scarab_List,
                         laser_orientation -= 90
                         break
             laser_orientation = checkLaserOrientation(laser_orientation)
-        elif board[i][j][2:4] == "rP" or board[i][j][2:4] == "sP":
+        elif board[i][j][3:4] == "P":
             print("You've won")
+            break
+        elif board[i][j][3:4] == "S":
             break
         elif board[i][j] == "----":
             break
         
-        if laser_endpoint == 1:
+        if laser_endpoint == True:
             break
 
 def checkLaserOrientation(laser_orientation):
