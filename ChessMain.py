@@ -48,8 +48,15 @@ Scarab_List = [red_Scarab_1, red_Scarab_2, silver_Scarab_1, silver_Scarab_2]
 Pyramid_List = [red_Pyramid_1, red_Pyramid_2, red_Pyramid_3, red_Pyramid_4, red_Pyramid_5, red_Pyramid_6, red_Pyramid_7, \
     silver_Pyramid_1, silver_Pyramid_2, silver_Pyramid_3, silver_Pyramid_4, silver_Pyramid_5, silver_Pyramid_6, silver_Pyramid_7]
 
-red_Eye = [[1, 0], [2, 0]]
-silver_Ankh = [[6, 9], [5, 9]]
+red_Eye = []
+for i in range(1, 8):
+    red_Eye.append([i, 0])
+red_Eye.append([0, 1])
+
+silver_Ankh = []
+for i in range(6, -1, -1):
+    silver_Ankh.append([i, 9])
+silver_Ankh.append([7, 8])
 
 
 ###################################
@@ -82,6 +89,7 @@ def main():
     selected_Square = []
     while running:
         for e in p.event.get():
+            stepped_on_eye = False
             if e.type == p.QUIT:
                 running = False
             elif e.type == p.MOUSEBUTTONDOWN:
@@ -117,11 +125,33 @@ def main():
                         playerClicks = []
                         selected_Square = []
                     else:
-                        # print([playerClicks[0][0], playerClicks[0][1]])
+                        # print(playerClicks[0])
                         # print(sqSelected[0])
                         for piece in Piece_List:
                             if piece.position == [playerClicks[0][0], playerClicks[0][1]]:
                                 # print(piece.position)
+                                if gs.silverToMove == True:
+                                    for eye in red_Eye:
+                                        if [playerClicks[1][0], playerClicks[1][1]] == eye:
+                                            print("Only silver pieces can move here")
+                                            stepped_on_eye = True
+                                            break
+                                    if stepped_on_eye == True:
+                                        sqSelected = ()
+                                        playerClicks = []
+                                        selected_Square = []
+                                        break
+                                elif gs.silverToMove == False:
+                                    for eye in silver_Ankh:
+                                        if [playerClicks[1][0], playerClicks[1][1]] == eye:
+                                            print("Only red pieces can move here")
+                                            stepped_on_eye = True
+                                            break
+                                    if stepped_on_eye == True:
+                                        sqSelected = ()
+                                        playerClicks = []
+                                        selected_Square = []
+                                        break
                                 if piece.name == "Sphinx":
                                     print("Sphinx can only be rotated")
                                 else:
@@ -212,6 +242,8 @@ def drawPieces(screen, board, Piece_List):
     for r in range(len(red_Eye)):
         if board[red_Eye[r][0]][red_Eye[r][1]] == "----":
             screen.blit(IMAGES["rE"],p.Rect(red_Eye[r][1]*SQ_SIZE, red_Eye[r][0]*SQ_SIZE, SQ_SIZE, SQ_SIZE))
+        if board[silver_Ankh[r][0]][silver_Ankh[r][1]] == "----":
+            screen.blit(IMAGES["sE"],p.Rect(silver_Ankh[r][1]*SQ_SIZE, silver_Ankh[r][0]*SQ_SIZE, SQ_SIZE, SQ_SIZE))
 
 def shootLaser(screen, gs, Piece_List, red_Sphinx, silver_Sphinx, Anubis_List, Scarab_List, Pyramid_List):
     if gs.silverToMove == True:
