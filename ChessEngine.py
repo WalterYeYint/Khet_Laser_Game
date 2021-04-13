@@ -1,8 +1,9 @@
 class GameState():
-    def __init__(self, piece_positions):
-        self.board = [["----" for i in range(10)] for j in range(8)]
+    def __init__(self, piece_positions, DIMENSION_X, DIMENSION_Y):
+        self.board = [["----" for i in range(DIMENSION_X)] for j in range(DIMENSION_Y)]
         for i in piece_positions:
             self.board[i.position[0]][i.position[1]] = i.text
+        self.eyes = []
 
         # self.board = [
         #     ["rS", "--", "--", "--", "rA", "rP", "rA", "rY", "--", "--"],
@@ -16,6 +17,7 @@ class GameState():
         # ]
 
         self.silverToMove = True
+        self.laser_status = False
         self.moveLog = []
     
     def makeMove(self, move, piece):
@@ -39,6 +41,7 @@ class GameState():
                     piece.position = [move.endRow, move.endCol]
                     self.moveLog.append(move)
                     self.silverToMove = not self.silverToMove
+                    self.laser_status = True
                 else:
                     print("This piece cannot be swapped")
             elif self.board[move.endRow][move.endCol] == "----":
@@ -47,6 +50,7 @@ class GameState():
                 piece.position = [move.endRow, move.endCol]
                 self.moveLog.append(move)
                 self.silverToMove = not self.silverToMove
+                self.laser_status = True
             else:
                 print("This place is occupied")
         else:

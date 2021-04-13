@@ -11,6 +11,47 @@ SQ_SIZE = WIDTH // DIMENSION_X
 MAX_FPS = 15
 IMAGES = {}
 
+red_Sphinx = ChessEngine.Sphinx([0, 0], "r", "01", "Sphinx", 180)
+silver_Sphinx = ChessEngine.Sphinx([7, 9], "s", "02", "Sphinx", 0)
+red_Pharoh = ChessEngine.Pharoh([0, 5], "r", "01", "Pharoh", 180)
+silver_Pharoh = ChessEngine.Pharoh([7, 4], "s", "02", "Pharoh", 0)
+red_Anubis_1 = ChessEngine.Anubis([0, 4], "r", "01", "Anubis", 180)
+red_Anubis_2 = ChessEngine.Anubis([0, 6], "r", "02", "Anubis", 180)
+silver_Anubis_1 = ChessEngine.Anubis([7, 3], "s", "03", "Anubis", 0)
+silver_Anubis_2 = ChessEngine.Anubis([7, 5], "s", "04", "Anubis", 0)
+red_Scarab_1 = ChessEngine.Scarab([3, 4], "r", "01", "Scarab", 0)
+red_Scarab_2 = ChessEngine.Scarab([3, 5], "r", "02", "Scarab", -90)
+silver_Scarab_1 = ChessEngine.Scarab([4, 4], "s", "03", "Scarab", 90)
+silver_Scarab_2 = ChessEngine.Scarab([4, 5], "s", "04", "Scarab", 180)
+red_Pyramid_1 = ChessEngine.Pyramid([0, 7], "r", "01", "Pyramid", 90)
+red_Pyramid_2 = ChessEngine.Pyramid([1, 2], "r", "02", "Pyramid", 0)
+red_Pyramid_3 = ChessEngine.Pyramid([3, 0], "r", "03", "Pyramid", 180)
+red_Pyramid_4 = ChessEngine.Pyramid([3, 7], "r", "04", "Pyramid", 90)
+red_Pyramid_5 = ChessEngine.Pyramid([4, 0], "r", "05", "Pyramid", 90)
+red_Pyramid_6 = ChessEngine.Pyramid([4, 7], "r", "06", "Pyramid", 180)
+red_Pyramid_7 = ChessEngine.Pyramid([5, 6], "r", "07", "Pyramid", 90)
+silver_Pyramid_1 = ChessEngine.Pyramid([2, 3], "s", "08", "Pyramid", -90)
+silver_Pyramid_2 = ChessEngine.Pyramid([3, 2], "s", "09", "Pyramid", 0)
+silver_Pyramid_3 = ChessEngine.Pyramid([3, 9], "s", "10", "Pyramid", -90)
+silver_Pyramid_4 = ChessEngine.Pyramid([4, 2], "s", "11", "Pyramid", -90)
+silver_Pyramid_5 = ChessEngine.Pyramid([4, 9], "s", "12", "Pyramid", 0)
+silver_Pyramid_6 = ChessEngine.Pyramid([6, 7], "s", "13", "Pyramid", 180)
+silver_Pyramid_7 = ChessEngine.Pyramid([7, 2], "s", "14", "Pyramid", -90)
+# Piece_List = [red_Sphinx, silver_Sphinx, red_Pyramid_1, silver_Pyramid_1]
+Piece_List = [red_Sphinx, silver_Sphinx, red_Pharoh, silver_Pharoh, red_Anubis_1,\
+    red_Anubis_2, silver_Anubis_1, silver_Anubis_2, red_Scarab_1, red_Scarab_2, silver_Scarab_1,\
+        silver_Scarab_2, red_Pyramid_1, red_Pyramid_2, red_Pyramid_3, red_Pyramid_4, red_Pyramid_5,\
+            red_Pyramid_6, red_Pyramid_7, silver_Pyramid_1, silver_Pyramid_2, silver_Pyramid_3, silver_Pyramid_4,\
+                silver_Pyramid_5, silver_Pyramid_6, silver_Pyramid_7]
+Anubis_List = [red_Anubis_1, red_Anubis_2, silver_Anubis_1, silver_Anubis_2]
+Scarab_List = [red_Scarab_1, red_Scarab_2, silver_Scarab_1, silver_Scarab_2]
+Pyramid_List = [red_Pyramid_1, red_Pyramid_2, red_Pyramid_3, red_Pyramid_4, red_Pyramid_5, red_Pyramid_6, red_Pyramid_7, \
+    silver_Pyramid_1, silver_Pyramid_2, silver_Pyramid_3, silver_Pyramid_4, silver_Pyramid_5, silver_Pyramid_6, silver_Pyramid_7]
+
+red_Eye = [[1, 0], [2, 0]]
+silver_Ankh = [[6, 9], [5, 9]]
+
+
 ###################################
 # LOAD THE IMAGES
 def loadImages(Piece_List):
@@ -20,6 +61,8 @@ def loadImages(Piece_List):
     for piece in pieces:
         IMAGES[piece] = p.transform.scale(p.image.load("Images/" + piece + ".png"), (SQ_SIZE - 2, SQ_SIZE - 2))
     IMAGES["--"] = p.transform.scale(p.image.load("Images/" + "--" + ".png"), (SQ_SIZE - 2, SQ_SIZE - 2))
+    IMAGES["rE"] = p.transform.scale(p.image.load("Images/" + "rE" + ".png"), (SQ_SIZE - 2, SQ_SIZE - 2))
+    IMAGES["sE"] = p.transform.scale(p.image.load("Images/" + "sE" + ".png"), (SQ_SIZE - 2, SQ_SIZE - 2))
 
 #######################################
 # MAIN DRIVER. THIS WILL HANDLE USER INPUT AND UPDATING GRAPHICS
@@ -30,50 +73,10 @@ def main():
     clock = p.time.Clock()
     screen.fill(p.Color("white"))
 
-    red_Sphinx = ChessEngine.Sphinx([0, 0], "r", "01", "Sphinx", 180)
-    silver_Sphinx = ChessEngine.Sphinx([7, 9], "s", "02", "Sphinx", 0)
-    red_Pharoh = ChessEngine.Pharoh([0, 5], "r", "01", "Pharoh", 180)
-    silver_Pharoh = ChessEngine.Pharoh([7, 4], "s", "02", "Pharoh", 0)
-    red_Anubis_1 = ChessEngine.Anubis([0, 4], "r", "01", "Anubis", 180)
-    red_Anubis_2 = ChessEngine.Anubis([0, 6], "r", "02", "Anubis", 180)
-    silver_Anubis_1 = ChessEngine.Anubis([7, 3], "s", "03", "Anubis", 0)
-    silver_Anubis_2 = ChessEngine.Anubis([7, 5], "s", "04", "Anubis", 0)
-    red_Scarab_1 = ChessEngine.Scarab([3, 4], "r", "01", "Scarab", 0)
-    red_Scarab_2 = ChessEngine.Scarab([3, 5], "r", "02", "Scarab", -90)
-    silver_Scarab_1 = ChessEngine.Scarab([4, 4], "s", "03", "Scarab", 90)
-    silver_Scarab_2 = ChessEngine.Scarab([4, 5], "s", "04", "Scarab", 180)
-    red_Pyramid_1 = ChessEngine.Pyramid([0, 7], "r", "01", "Pyramid", 90)
-    red_Pyramid_2 = ChessEngine.Pyramid([1, 2], "r", "02", "Pyramid", 0)
-    red_Pyramid_3 = ChessEngine.Pyramid([3, 0], "r", "03", "Pyramid", 180)
-    red_Pyramid_4 = ChessEngine.Pyramid([3, 7], "r", "04", "Pyramid", 90)
-    red_Pyramid_5 = ChessEngine.Pyramid([4, 0], "r", "05", "Pyramid", 90)
-    red_Pyramid_6 = ChessEngine.Pyramid([4, 7], "r", "06", "Pyramid", 180)
-    red_Pyramid_7 = ChessEngine.Pyramid([5, 6], "r", "07", "Pyramid", 90)
-    silver_Pyramid_1 = ChessEngine.Pyramid([2, 3], "s", "08", "Pyramid", -90)
-    silver_Pyramid_2 = ChessEngine.Pyramid([3, 2], "s", "09", "Pyramid", 0)
-    silver_Pyramid_3 = ChessEngine.Pyramid([3, 9], "s", "10", "Pyramid", -90)
-    silver_Pyramid_4 = ChessEngine.Pyramid([4, 2], "s", "11", "Pyramid", -90)
-    silver_Pyramid_5 = ChessEngine.Pyramid([4, 9], "s", "12", "Pyramid", 0)
-    silver_Pyramid_6 = ChessEngine.Pyramid([6, 7], "s", "13", "Pyramid", 180)
-    silver_Pyramid_7 = ChessEngine.Pyramid([7, 2], "s", "14", "Pyramid", -90)
-    # Piece_List = [red_Sphinx, silver_Sphinx, red_Pyramid_1, silver_Pyramid_1]
-    Piece_List = [red_Sphinx, silver_Sphinx, red_Pharoh, silver_Pharoh, red_Anubis_1,\
-        red_Anubis_2, silver_Anubis_1, silver_Anubis_2, red_Scarab_1, red_Scarab_2, silver_Scarab_1,\
-            silver_Scarab_2, red_Pyramid_1, red_Pyramid_2, red_Pyramid_3, red_Pyramid_4, red_Pyramid_5,\
-                red_Pyramid_6, red_Pyramid_7, silver_Pyramid_1, silver_Pyramid_2, silver_Pyramid_3, silver_Pyramid_4,\
-                    silver_Pyramid_5, silver_Pyramid_6, silver_Pyramid_7]
-    
-    Anubis_List = [red_Anubis_1, red_Anubis_2, silver_Anubis_1, silver_Anubis_2]
-    Scarab_List = [red_Scarab_1, red_Scarab_2, silver_Scarab_1, silver_Scarab_2]
-    Pyramid_List = [red_Pyramid_1, red_Pyramid_2, red_Pyramid_3, red_Pyramid_4, red_Pyramid_5, red_Pyramid_6, red_Pyramid_7, \
-        silver_Pyramid_1, silver_Pyramid_2, silver_Pyramid_3, silver_Pyramid_4, silver_Pyramid_5, silver_Pyramid_6, silver_Pyramid_7]
-
-    gs = ChessEngine.GameState(Piece_List)
+    gs = ChessEngine.GameState(Piece_List, DIMENSION_X, DIMENSION_Y)
     loadImages(Piece_List)
     # print(IMAGES)
     running = True
-    laser_status = 0
-    sphinx_piece = red_Sphinx
     sqSelected = ()
     playerClicks = []
     selected_Square = []
@@ -92,7 +95,6 @@ def main():
                     sqSelected = (row, col)
                     playerClicks.append(sqSelected)
                     selected_Square = [playerClicks[0][0], playerClicks[0][1]]
-                if len(playerClicks) == 2:
                     if gs.silverToMove == True:
                         if gs.board[playerClicks[0][0]][playerClicks[0][1]][2:3] == "s":
                             pass
@@ -109,6 +111,7 @@ def main():
                             sqSelected = ()
                             playerClicks = []
                             continue
+                if len(playerClicks) == 2:
                     if gs.board[playerClicks[0][0]][playerClicks[0][1]] == "----":
                         sqSelected = ()
                         playerClicks = []
@@ -157,34 +160,25 @@ def main():
                                 else:
                                     piece.orientation -= 90
                                     gs.silverToMove = not gs.silverToMove
-                            elif e.key == p.K_SPACE:
-                                if piece.name == "Sphinx":
-                                    print("Firing Laser")
-                                    gs.silverToMove = not gs.silverToMove
-                                    laser_status = 1
-                                    sphinx_piece = piece
-                                    break
-                                else:
-                                    print("This piece cannot fire laser")
-                                    break
                             else:
                                 print("Invalid key input")
                                 break
                             if piece.orientation >= 360 or piece.orientation <= -360:
                                 piece.orientation = 0
                             print(piece.orientation)
+                            gs.laser_status = True
                     sqSelected = ()
                     playerClicks = []
                     selected_Square = []
 
         drawGameState(screen, gs, Piece_List, selected_Square)
         clock.tick(MAX_FPS)
-        if laser_status == 1:
+        if gs.laser_status == True:
             drawGameState(screen, gs, Piece_List, selected_Square)
-            shootLaser(screen, gs.board, Piece_List, sphinx_piece, Anubis_List, Scarab_List, Pyramid_List)
+            shootLaser(screen, gs, Piece_List, red_Sphinx, silver_Sphinx, Anubis_List, Scarab_List, Pyramid_List)
             p.display.flip()
-            time.sleep(3)
-            laser_status = 0
+            time.sleep(1)
+            gs.laser_status = False
         p.display.flip()
 
 ##################################################
@@ -215,23 +209,29 @@ def drawPieces(screen, board, Piece_List):
                         screen.blit(p.transform.rotate(IMAGES[piece[2:4]], i.orientation), p.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
             else:
                 screen.blit(IMAGES["--"],p.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
+    for r in range(len(red_Eye)):
+        if board[red_Eye[r][0]][red_Eye[r][1]] == "----":
+            screen.blit(IMAGES["rE"],p.Rect(red_Eye[r][1]*SQ_SIZE, red_Eye[r][0]*SQ_SIZE, SQ_SIZE, SQ_SIZE))
 
-def shootLaser(screen, board, Piece_List, sphinx_piece, Anubis_List, Scarab_List, Pyramid_List):
-    if sphinx_piece.id == "01":
+def shootLaser(screen, gs, Piece_List, red_Sphinx, silver_Sphinx, Anubis_List, Scarab_List, Pyramid_List):
+    if gs.silverToMove == True:
+        sphinx_piece = red_Sphinx
         i = 0
         j = 0
-        moveLaser(screen, board, Piece_List, sphinx_piece, Anubis_List, Scarab_List, Pyramid_List, i, j)
+        moveLaser(screen, gs.board, Piece_List, sphinx_piece, Anubis_List, Scarab_List, Pyramid_List, i, j)
 
-    elif sphinx_piece.id == "02":
+    elif gs.silverToMove == False:
+        sphinx_piece = silver_Sphinx
         i = sphinx_piece.position[0]
         j = sphinx_piece.position[1]
         print(i, j)
-        moveLaser(screen, board, Piece_List, sphinx_piece, Anubis_List, Scarab_List, Pyramid_List, i, j)
+        moveLaser(screen, gs.board, Piece_List, sphinx_piece, Anubis_List, Scarab_List, Pyramid_List, i, j)
 
 def moveLaser(screen, board, Piece_List, sphinx_piece, Anubis_List, Scarab_List, Pyramid_List, i, j):
     
     laser_orientation = sphinx_piece.orientation
     laser_endpoint = False
+    laser_checkpoint = [None, None]
     switch_i = {
         0: -1,
         180: +1,
@@ -278,13 +278,18 @@ def moveLaser(screen, board, Piece_List, sphinx_piece, Anubis_List, Scarab_List,
         elif board[i][j][3:4] == "Y":
             for piece in Pyramid_List:
                 if piece.id == board[i][j][0:2]:
+                    if laser_checkpoint == piece.position:
+                        laser_endpoint = True
+                        break
                     orientation_result = laser_orientation - piece.orientation
-                    print(piece.orientation, laser_orientation, orientation_result)
+                    print(laser_orientation, piece.orientation, orientation_result)
                     if orientation_result == 0 or orientation_result == 360:
                         laser_orientation += 90
+                        laser_checkpoint = piece.position
                         break
                     elif orientation_result == -90 or orientation_result == 270:
                         laser_orientation -= 90
+                        laser_checkpoint = piece.position
                         break
                     else:
                         board[i][j] = "----"
@@ -294,12 +299,18 @@ def moveLaser(screen, board, Piece_List, sphinx_piece, Anubis_List, Scarab_List,
         elif board[i][j][3:4] == "C":
             for piece in Scarab_List:
                 if piece.id == board[i][j][0:2]:
+                    if laser_checkpoint == piece.position:
+                        laser_endpoint = True
+                        break
                     orientation_result = laser_orientation - piece.orientation
+                    print(laser_orientation, piece.orientation, orientation_result)
                     if orientation_result == 0 or orientation_result == 360 or orientation_result == 180 or orientation_result == -180:
                         laser_orientation += 90
+                        laser_checkpoint = piece.position
                         break
                     else:
                         laser_orientation -= 90
+                        laser_checkpoint = piece.position
                         break
             laser_orientation = checkLaserOrientation(laser_orientation)
         elif board[i][j][3:4] == "P":
@@ -314,9 +325,9 @@ def moveLaser(screen, board, Piece_List, sphinx_piece, Anubis_List, Scarab_List,
             break
 
 def checkLaserOrientation(laser_orientation):
-    if laser_orientation > 360:
+    if laser_orientation >= 360:
         laser_orientation = laser_orientation - 360
-    elif laser_orientation < -360:
+    elif laser_orientation <= -360:
         laser_orientation = laser_orientation + 360
     return laser_orientation
 
